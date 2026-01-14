@@ -1,9 +1,9 @@
 FROM amazoncorretto:21-alpine AS build
 
 RUN apk add --no-cache icu-libs
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US:en
-ENV LC_ALL en_US.UTF-8
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US:en
+ENV LC_ALL=en_US.UTF-8
 
 WORKDIR /app
 
@@ -14,7 +14,7 @@ RUN chmod +x mvnw
 RUN ./mvnw dependency:go-offline
 
 COPY src ./src
-RUN ./mvnw clean package -DskipTests
+RUN ./mvnw clean package -DskipTests -Dproject.build.sourceEncoding=UTF-8
 
 FROM amazoncorretto:21-alpine
 WORKDIR /app
