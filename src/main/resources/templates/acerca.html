@@ -1,0 +1,100 @@
+<div th:fragment="content" xmlns:th="http://www.thymeleaf.org">
+    <style>
+        .about-container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 60px 40px;
+        }
+
+        .info-card-dark {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(132, 189, 58, 0.15);
+            border-radius: 20px;
+            padding: 30px;
+            height: 100%;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .info-card-dark:hover {
+            transform: translateY(-10px);
+            background: rgba(132, 189, 58, 0.05);
+            border-color: var(--ues-light-green);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .icon-box {
+            font-size: 3rem;
+            color: var(--ues-light-green);
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 10px rgba(132, 189, 58, 0.3));
+        }
+
+        .text-ues-green {
+            color: var(--ues-light-green);
+        }
+
+        .version-badge {
+            background: rgba(132, 189, 58, 0.1);
+            color: var(--ues-light-green);
+            padding: 5px 15px;
+            border-radius: 50px;
+            border: 1px solid rgba(132, 189, 58, 0.3);
+            font-size: 0.8rem;
+        }
+    </style>
+
+    <div class="about-container card shadow-lg animate__animated animate__fadeIn">
+        <div class="text-center mb-5">
+            <span class="version-badge mb-3 d-inline-block">Versión 1.0.0</span>
+            <h1 class="display-5 fw-bold text-white">Sobre el <span class="text-ues-green">sistema</span></h1>
+            <p class="lead text-white-50">Plataforma de seguimiento de egresados</p>
+            <div class="mx-auto mt-3" style="width: 60px; height: 4px; background: var(--ues-light-green); border-radius: 10px;"></div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-12">
+                <div class="info-card-dark mb-2">
+                    <div class="row align-items-center">
+                        <div class="col-md-10">
+                            <h3 class="fw-bold text-ues-green">Objetivo del sistema</h3>
+                            <p class="fs-5 text-white-50">
+                                Optimizar el seguimiento de egresados de la UES San
+                                José del Rincón.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="info-card-dark text-center">
+                    <div class="icon-box"><i class="bi bi-shield-lock-fill"></i></div>
+                    <h5 class="fw-bold text-white">Gestión segura</h5>
+                    <p class="small text-white-50">Conservación de la integridad de la información y control de acceso administrativo.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="info-card-dark text-center">
+                    <div class="icon-box"><i class="bi bi-graph-up-arrow"></i></div>
+                    <h5 class="fw-bold text-white">Acceso y manejo de datos eficiente</h5>
+                    <p class="small text-white-50">Acceso a datos escenciales para el administrador y datos generales para visitantes.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="info-card-dark text-center">
+                    <div class="icon-box"><i class="bi bi-mortarboard-fill"></i></div>
+                    <h5 class="fw-bold text-white">Identidad UES</h5>
+                    <p class="small text-white-50">Un punto de encuentro digital para todos los que formamos parte de esta institución.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-5 pt-4 border-top border-secondary border-opacity-25">
+            <p class="text-white-50 small mb-1">Unidad de Estudios Superiores San José del Rincón</p>
+            <p class="fw-bold text-ues-green mb-0">Universidad Mexiquense del Bicentenario</p>
+        </div>
+    </div>
+</div>

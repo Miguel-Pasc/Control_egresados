@@ -1,0 +1,220 @@
+<div th:fragment="content" xmlns:th="http://www.thymeleaf.org">
+    <style>
+        .form-container {
+            width: 90%;
+            max-width: 950px;
+            margin: 30px auto;
+            padding: 45px;
+            background-color: #1e1e1e !important;
+            border: 2px solid var(--ues-dark-green);
+            border-radius: 25px;
+            color: white;
+        }
+
+        .form-title {
+            color: var(--ues-dark-green) !important;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .form-label {
+            color: var(--ues-light-green);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .form-control, .form-select {
+            background-color: rgba(255, 255, 255, 0.07) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            color: white !important;
+            border-radius: 10px;
+        }
+
+        .form-control:focus, .form-select:focus {
+            background-color: rgba(255, 255, 255, 0.12) !important;
+            border-color: var(--ues-light-green) !important;
+            box-shadow: 0 0 10px rgba(132, 189, 58, 0.2) !important;
+        }
+
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.7) !important;
+            opacity: 1;
+        }
+
+        option {
+            background-color: #1e1e1e;
+            color: white;
+        }
+
+        .input-group-text {
+            background-color: var(--ues-dark-green) !important;
+            color: white !important;
+            border: 1px solid var(--ues-dark-green) !important;
+            font-weight: bold;
+            border-radius: 10px 0 0 10px !important;
+        }
+
+        .btn-primary {
+            background-color: var(--ues-dark-green) !important;
+            border: none;
+        }
+
+        .btn-outline-secondary {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        @media (max-width: 768px) {
+            .form-container { width: 95%; padding: 20px; }
+            .btn-action { width: 100% !important; margin-bottom: 10px; }
+        }
+    </style>
+
+    <div class="form-container shadow-lg mt-4">
+        <h2 class="text-center mb-4 fw-bold text-primary form-title" th:text="${titulo}">Registrar Egresado</h2>
+
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert" style="border-radius: 15px;">
+            <i class="bi bi-exclamation-octagon-fill me-2"></i>
+            <span th:text="${error}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <form th:action="@{/egresados/guardar}" th:object="${egresado}" method="post" id="egresadoForm" class="needs-validation">
+            <input type="hidden" th:field="*{id}">
+
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Matrícula</label>
+                        <div class="input-group">
+                            <span class="input-group-text">13</span>
+                            <input type="text" id="matriculaVisual" class="form-control"
+                                   th:classappend="${#fields.hasErrors('matricula')} ? 'is-invalid'"
+                                   placeholder="6 dígitos restantes" maxlength="6" pattern="\d{6}" required>
+                            <input type="hidden" th:field="*{matricula}" id="matriculaReal">
+                            <div class="invalid-feedback" th:errors="*{matricula}"></div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Nombre(s)</label>
+                        <input type="text" th:field="*{nombre}" class="form-control"
+                               th:classappend="${#fields.hasErrors('nombre')} ? 'is-invalid'"
+                               placeholder="Ej: Juan" required>
+                        <div class="invalid-feedback" th:errors="*{nombre}"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Apellido paterno</label>
+                        <input type="text" th:field="*{apellidoPaterno}" class="form-control"
+                               th:classappend="${#fields.hasErrors('apellidoPaterno')} ? 'is-invalid'"
+                               placeholder="Ej: Pérez" required>
+                        <div class="invalid-feedback" th:errors="*{apellidoPaterno}"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Apellido materno</label>
+                        <input type="text" th:field="*{apellidoMaterno}" class="form-control"
+                               th:classappend="${#fields.hasErrors('apellidoMaterno')} ? 'is-invalid'"
+                               placeholder="Ej: López" required>
+                        <div class="invalid-feedback" th:errors="*{apellidoMaterno}"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Carrera</label>
+                        <select th:field="*{carrera}" class="form-select" th:classappend="${#fields.hasErrors('carrera')} ? 'is-invalid'" required>
+                            <option value="">Seleccione carrera...</option>
+                            <option value="Ingeniería en Sistemas Computacionales">Ingeniería en Sistemas Computacionales</option>
+                            <option value="Licenciatura en Contaduría">Licenciatura en Contaduría</option>
+                            <option value="Ingeniería en Innovación Agrícola Sustentable">Ingeniería en Innovación Agrícola Sustentable</option>
+                        </select>
+                        <div class="invalid-feedback" th:errors="*{carrera}"></div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Generación</label>
+                        <select th:field="*{generacion}" class="form-select" th:classappend="${#fields.hasErrors('generacion')} ? 'is-invalid'" required>
+                            <option value="">Seleccione generación...</option>
+                            <option th:each="anio : ${ {'2007-2012','2008-2013','2009-2014','2010-2015','2011-2016','2012-2017','2013-2018','2014-2019','2015-2020','2016-2021','2017-2022','2018-2023','2019-2024','2020-2025','2025-2026'} }"
+                                    th:value="${anio}" th:text="${anio}"></option>
+                        </select>
+                        <div class="invalid-feedback" th:errors="*{generacion}"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Género</label>
+                        <select th:field="*{genero}" class="form-select" th:classappend="${#fields.hasErrors('genero')} ? 'is-invalid'" required>
+                            <option value="Masculino">Masculino</option>
+                            <option value="Femenino">Femenino</option>
+                        </select>
+                        <div class="invalid-feedback" th:errors="*{genero}"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Correo electrónico</label>
+                        <input type="email" th:field="*{correo}" class="form-control" placeholder="Ej: ejemplo@correo"
+                               th:classappend="${#fields.hasErrors('correo')} ? 'is-invalid'" required>
+                        <div class="invalid-feedback" th:errors="*{correo}"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Teléfono (10 dígitos)</label>
+                        <input type="tel" th:field="*{telefono}" class="form-control"
+                               th:classappend="${#fields.hasErrors('telefono')} ? 'is-invalid'"
+                               placeholder="Ej: 7120000000" maxlength="10" required>
+                        <div class="invalid-feedback" th:errors="*{telefono}"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Estatus</label>
+                        <select th:field="*{estatus}" class="form-select" th:classappend="${#fields.hasErrors('estatus')} ? 'is-invalid'" required>
+                            <option value="Egresado">Egresado</option>
+                            <option value="En seguimiento">En seguimiento</option>
+                            <option value="Titulado">Titulado</option>
+                        </select>
+                        <div class="invalid-feedback" th:errors="*{estatus}"></div>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label fw-bold">Domicilio</label>
+                    <textarea th:field="*{domicilio}" class="form-control" placeholder="Ingrese su domicilio"
+                              th:classappend="${#fields.hasErrors('domicilio')} ? 'is-invalid'" rows="2" required></textarea>
+                    <div class="invalid-feedback" th:errors="*{domicilio}"></div>
+                </div>
+            </div>
+
+            <div class="text-center mt-5">
+                <a th:href="@{/egresados}" class="btn btn-outline-secondary px-5 rounded-pill me-2">Cancelar</a>
+                <button type="submit" class="btn btn-primary px-5 rounded-pill shadow">Aceptar</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('egresadoForm').addEventListener('submit', function(e) {
+            const visual = document.getElementById('matriculaVisual').value;
+            if (visual) {
+                document.getElementById('matriculaReal').value = "13" + visual;
+            }
+        });
+
+        window.addEventListener('DOMContentLoaded', (event) => {
+            const realVal = document.getElementById('matriculaReal').value;
+            if(realVal && realVal.startsWith("13")) {
+                document.getElementById('matriculaVisual').value = realVal.substring(2);
+            }
+        });
+
+        const soloNumeros = (e) => {
+            if (!/[0-9]/.test(e.key) && e.key !== 'Backspace' && e.key !== 'Tab' && e.key !== 'Enter') {
+                e.preventDefault();
+            }
+        };
+
+        document.getElementById('matriculaVisual').addEventListener('keypress', soloNumeros);
+        document.getElementById('telefono').addEventListener('keypress', soloNumeros);
+    </script>
+</div>

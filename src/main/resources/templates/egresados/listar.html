@@ -1,0 +1,269 @@
+<div th:fragment="content" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org">
+
+    <style>
+        .tabla-container {
+            width: 85%;
+            margin: 30px auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .table {
+            border-collapse: separate;
+            border-spacing: 0 12px;
+        }
+
+        .table tr {
+            background-color: transparent;
+            transition: transform 0.2s;
+            border-radius: 10px;
+        }
+
+        .table tr:hover {
+            transform: scale(1.01);
+        }
+
+        .table td, .table th {
+            padding: 15px;
+            border: none !important;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .table tr td:first-child { border-radius: 20px 0 0 20px; }
+        .table tr td:last-child { border-radius: 0 20px 20px 0; }
+
+        .table tr th:first-child { border-radius: 20px 0 0 20px; }
+        .table tr th:last-child { border-radius: 0 20px 20px 0; }
+
+        .filtro-input {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 10px;
+        }
+
+        .filtro-input {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 10px;
+            color: white !important;
+        }
+
+        .filtro-input::placeholder {
+            color: rgba(255, 255, 255, 0.7) !important;
+            opacity: 1;
+        }
+
+        .filtro-input::-webkit-input-placeholder { color: rgba(255, 255, 255, 0.7) !important; }
+        .filtro-input::-moz-placeholder { color: rgba(255, 255, 255, 0.7) !important; }
+        .filtro-input:-ms-input-placeholder { color: rgba(255, 255, 255, 0.7) !important; }
+
+        .filtro-label-text {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        @media (max-width: 768px) {
+            .table thead {
+                display: none;
+            }
+
+            .table, .table tbody, .table tr, .table td {
+                display: block;
+                width: 100%;
+            }
+
+            .table tr {
+                margin-bottom: 20px;
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                padding: 10px;
+            }
+
+            .table td {
+                text-align: right;
+                padding-left: 50%;
+                position: relative;
+                min-height: 45px;
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+            }
+
+            .table td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 15px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 45%;
+                font-weight: bold;
+                text-align: left;
+                color: var(--ues-dark-green);
+            }
+        }
+    </style>
+
+    <div class="tabla-container shadow-lg">
+        <h2 class="text-center text-white mb-4 fw-bold">Egresados de la UESSJR</h2>
+
+        <div th:if="${mensajeExito}" class="alert alert-success alert-dismissible fade show rounded-pill" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>
+            <span th:text="${mensajeExito}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <div class="row g-3 mb-4 align-items-end">
+            <div class="col-md-3">
+                <label class="text-white small">Generación</label>
+                <select class="form-select filtro-input" id="filterGeneracion" name="generacion">
+                    <option value="">Todas</option>
+                    <option th:each="gen : ${listaGeneraciones}"
+                            th:value="${gen}"
+                            th:text="${gen}"
+                            th:selected="${gen == genSel}"></option>
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <label class="text-white small">Carrera</label>
+                <select class="form-select filtro-input" id="filterCarrera" name="carrera">
+                    <option value="">Todas las carreras</option>
+                    <option th:each="car : ${listaCarreras}"
+                            th:value="${car}"
+                            th:text="${car}"
+                            th:selected="${car == carreraSel}"></option>
+                </select>
+            </div>
+
+            <div class="col-md-4">
+                <label class="text-white small">Buscar por nombre o matrícula</label>
+                <input type="text"
+                       class="form-control filtro-input"
+                       placeholder="Escribe para buscar..."
+                       th:value="${qSel}"> </div>
+
+            <div class="col-md-2 text-end" sec:authorize="hasRole('ADMIN')">
+                <a th:href="@{/egresados/nuevo}" class="btn btn-success rounded-pill w-100 shadow">
+                    <i class="bi bi-plus-circle"></i> Nuevo
+                </a>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                <tr class="text-white">
+                    <th>#</th>
+                    <th sec:authorize="hasRole('ADMIN')">Matrícula</th>
+                    <th>Nombre completo</th>
+                    <th>Carrera</th>
+                    <th>Generación</th>
+                    <th>Estatus</th>
+                    <th sec:authorize="hasRole('ADMIN')">Domicilio</th>
+                    <th sec:authorize="hasRole('ADMIN')">Género</th>
+                    <th sec:authorize="hasRole('ADMIN')">Teléfono</th>
+                    <th sec:authorize="hasRole('ADMIN')">Correo</th>
+                    <th sec:authorize="hasRole('ADMIN')">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="egresado, iterStat : ${egresados}">
+                    <td data-label="#" class="fw-bold" th:text="${iterStat.count}"></td>
+
+                    <td data-label="Matricula" sec:authorize="hasRole('ADMIN')" th:text="${egresado.matricula}"></td>
+                    <td data-label="Nombre" th:text="${egresado.nombreCompleto}"></td>
+                    <td data-label="Carrera" th:text="${egresado.carrera}"></td>
+                    <td data-label="Generación" th:text="${egresado.generacion}"></td>
+                    <td data-label="Estatus" th:text="${egresado.estatus}"></td>
+                    <td data-label="Domicilio" sec:authorize="hasRole('ADMIN')" th:text="${egresado.domicilio}"></td>
+                    <td data-label="Género" sec:authorize="hasRole('ADMIN')" th:text="${egresado.genero}"></td>
+                    <td data-label="Teléfono" sec:authorize="hasRole('ADMIN')" th:text="${egresado.telefono}"></td>
+                    <td data-label="Correo" sec:authorize="hasRole('ADMIN')" th:text="${egresado.correo}"></td>
+
+                    <td data-label="Acciones" sec:authorize="hasRole('ADMIN')">
+                        <div class="btn-group">
+                            <a th:href="@{/egresados/editar/{id}(id=${egresado.id})}"
+                               class="btn btn-sm btn-outline-primary border-0 rounded-pill">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+                            <button type="button"
+                                    class="btn btn-sm btn-outline-danger border-0 rounded-pill"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#deleteModal"
+                                    th:data-id="${egresado.id}"
+                                    th:data-nombre="${egresado.nombreCompleto}"
+                                    onclick="prepararEliminar(this)">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 20px; border: none; overflow: hidden;">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="deleteModalLabel text-white">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i> Confirmar eliminación
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4 text-center bg-dark">
+                    <p class="fs-5">¿Estás seguro de que deseas eliminar al egresado?</p>
+                    <p class="text-muted small">Esta acción no se puede deshacer.</p>
+                    <strong id="nombreEgresadoEliminar" class="text-primary"></strong>
+                </div>
+                <div class="modal-footer border-0 d-flex justify-content-center pb-4">
+                    <button type="button" class="btn btn-outline-secondary px-4 rounded-pill" data-bs-dismiss="modal">Cancelar</button>
+                    <a id="confirmDeleteBtn" href="#" class="btn btn-danger px-4 rounded-pill shadow">Eliminar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const inputBusqueda = document.querySelector('input[placeholder="Escribe para buscar..."]');
+        const selectCarrera = document.getElementById('filterCarrera');
+        const selectGeneracion = document.getElementById('filterGeneracion');
+
+        function filtrar() {
+            const q = inputBusqueda.value;
+            const carrera = selectCarrera.value;
+            const gen = selectGeneracion.value;
+
+            const url = `/egresados?q=${encodeURIComponent(q)}&carrera=${encodeURIComponent(carrera)}&generacion=${encodeURIComponent(gen)}`;
+
+            fetch(url)
+                .then(response => response.text())
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const nuevaTabla = doc.querySelector('.table-responsive').innerHTML;
+
+                    document.querySelector('.table-responsive').innerHTML = nuevaTabla;
+                });
+        }
+
+        inputBusqueda.addEventListener('input', filtrar);
+        selectCarrera.addEventListener('change', filtrar);
+        selectGeneracion.addEventListener('change', filtrar);
+    });
+
+    function prepararEliminar(boton) {
+        const id = boton.getAttribute('data-id');
+        const nombre = boton.getAttribute('data-nombre');
+
+        document.getElementById('nombreEgresadoEliminar').innerText = nombre;
+
+        const urlEliminar = '/egresados/eliminar/' + id;
+        document.getElementById('confirmDeleteBtn').setAttribute('href', urlEliminar);
+    }
+</script>
