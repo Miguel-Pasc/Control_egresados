@@ -1,4 +1,10 @@
 FROM amazoncorretto:21-alpine AS build
+
+RUN apk add --no-cache icu-libs
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
+
 WORKDIR /app
 
 COPY .mvn/ .mvn
