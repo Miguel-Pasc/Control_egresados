@@ -21,7 +21,7 @@ public class DataLoader {
                 e1.setCarrera("Ingeniería en Sistemas Computacionales");
                 e1.setGeneracion("2019-2024");
                 e1.setEstatus("Titulado");
-                e1.setDomicilio("Calle Falsa 123, Toluca");
+                e1.setDomicilio("Atlacomulco de Fabela");
                 e1.setGenero("Masculino");
                 e1.setTelefono("7221234567");
                 e1.setCorreo("juan@correo.com");
@@ -36,7 +36,7 @@ public class DataLoader {
                 e2.setCarrera("Licenciatura en Contaduría");
                 e2.setGeneracion("2020-2025");
                 e2.setEstatus("Egresado");
-                e2.setDomicilio("Av. Central 45, San José");
+                e2.setDomicilio("San José");
                 e2.setGenero("Femenino");
                 e2.setTelefono("7129876543");
                 e2.setCorreo("maria@correo.com");
